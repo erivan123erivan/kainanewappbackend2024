@@ -7,11 +7,10 @@
     "allowJs": true,
     "rootDir": "./src",
     "strict": true,
-    "typeRoots": ["node_modules/@types"]
     "esModuleInterop": true,
     "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types"],
-    
+    "types": ["node", "express"],
     "forceConsistentCasingInFileNames": true
   },
   "include": ["src/**/*"],
