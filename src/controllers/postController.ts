@@ -15,13 +15,13 @@ export const getPosts = async (req: Request, res: Response): Promise<void> => {
     if (lastPostResult.rows.length > 0) {
       const lastPostId = lastPostResult.rows[0].id; // Assuming there's an 'id' column in the 'post' table
 
-      // Get all posts excluding the most recent post
+      // Get all posts excluding the most recent post, ordered by date of publication
       const result = await pool.query(
-        'SELECT * FROM post WHERE categories = $1 AND id != $2',
+        'SELECT * FROM post WHERE categories = $1 AND id != $2 ORDER BY date_de_publication DESC',
         ['reportages', lastPostId]
       );
 
-      res.status(200).json(result.rows); // Return the filtered posts
+      res.status(200).json(result.rows); // Return the filtered and ordered posts
     } else {
       // If there are no posts in the category, return an empty array
       res.status(200).json([]);
@@ -31,6 +31,7 @@ export const getPosts = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
 
 
 
