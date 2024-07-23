@@ -2,16 +2,73 @@ import { Request, Response } from "express";
 const pool = require("../db");
 
 
-export const getAllPosts = async (req: Request, res: Response): Promise<void> => {
+
+export const getPostsLast = async (req: Request, res: Response): Promise<void> => {
   try {
-    const result = await pool.query('SELECT * FROM post ORDER BY date_de_publication DESC');
-    res.status(200).json(result.rows); // Return all posts ordered by publication date
+    const result = await pool.query(
+      'SELECT * FROM post WHERE categories = $1 ORDER BY date_de_publication DESC LIMIT 1',
+      ['reportages']
+    );
+    res.status(200).json(result.rows); // Return the most recent post
   } catch (error) {
-    console.error("Error fetching posts:", error);
+    console.error("Error fetching the most recent post:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
 
+export const getLastLongsFormats = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const result = await pool.query(
+      'SELECT * FROM post WHERE categories = $1 ORDER BY date_de_publication DESC LIMIT 1',
+      ['longsformats']
+    );
+    res.status(200).json(result.rows); // Return the most recent post
+  } catch (error) {
+    console.error("Error fetching the most recent post:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+export const getLastLePailladin = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const result = await pool.query(
+      'SELECT * FROM post WHERE categories = $1 ORDER BY date_de_publication DESC LIMIT 1',
+      ['lepailladin']
+    );
+    res.status(200).json(result.rows); // Return the most recent post
+  } catch (error) {
+    console.error("Error fetching the most recent post:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+export const getLastCaptations = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const result = await pool.query(
+      'SELECT * FROM post WHERE categories = $1 ORDER BY date_de_publication DESC LIMIT 1',
+      ['captations']
+    );
+    res.status(200).json(result.rows); // Return the most recent post
+  } catch (error) {
+    console.error("Error fetching the most recent post:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getLastEmissions = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const result = await pool.query(
+      'SELECT * FROM post WHERE categories = $1 ORDER BY date_de_publication DESC LIMIT 1',
+      ['emissions']
+    );
+    res.status(200).json(result.rows); // Return the most recent post
+  } catch (error) {
+    console.error("Error fetching the most recent post:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 
 export const getPosts = async (req: Request, res: Response): Promise<void> => {
@@ -44,6 +101,16 @@ export const getPosts = async (req: Request, res: Response): Promise<void> => {
 
 
 
+export const getAllPosts = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const result = await pool.query('SELECT * FROM post ORDER BY date_de_publication DESC');
+    res.status(200).json(result.rows); // Return all posts ordered by publication date
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 
 /*
    get posts emissions 
@@ -62,12 +129,6 @@ export const getPostsEmissions = async (req: Request, res: Response): Promise<vo
   }
 };
 
-
-
-
-
-
-
 export const getPostsCaptations = async (req: Request, res: Response): Promise<void> => {
   try {
     const result = await pool.query(
@@ -81,14 +142,6 @@ export const getPostsCaptations = async (req: Request, res: Response): Promise<v
   }
 };
 
-
-
-
-
-
-
-
-
 export const getPostsLePailladin = async (req: Request, res: Response): Promise<void> => {
   try {
     const result = await pool.query(
@@ -101,20 +154,6 @@ export const getPostsLePailladin = async (req: Request, res: Response): Promise<
     res.status(500).json({ message: "Server error" });
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export const getPostsLeLongsFormats = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -144,106 +183,6 @@ export const getPostsLeLongsFormats = async (req: Request, res: Response): Promi
 
 
 
-
-
-
-
-export const getPostsLast = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const result = await pool.query(
-      'SELECT * FROM post WHERE categories = $1 ORDER BY date_de_publication DESC LIMIT 1',
-      ['reportages']
-    );
-    res.status(200).json(result.rows); // Return the most recent post
-  } catch (error) {
-    console.error("Error fetching the most recent post:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
-
-
-
-
-
-
-
-
-
-
-
-export const getLastLongsFormats = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const result = await pool.query(
-      'SELECT * FROM post WHERE categories = $1 ORDER BY date_de_publication DESC LIMIT 1',
-      ['longsformats']
-    );
-    res.status(200).json(result.rows); // Return the most recent post
-  } catch (error) {
-    console.error("Error fetching the most recent post:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
-
-
-
-
-
-
-
-
-
-
-
-export const getLastLePailladin = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const result = await pool.query(
-      'SELECT * FROM post WHERE categories = $1 ORDER BY date_de_publication DESC LIMIT 1',
-      ['lepailladin']
-    );
-    res.status(200).json(result.rows); // Return the most recent post
-  } catch (error) {
-    console.error("Error fetching the most recent post:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
-
-
-
-
-
-export const getLastCaptations = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const result = await pool.query(
-      'SELECT * FROM post WHERE categories = $1 ORDER BY date_de_publication DESC LIMIT 1',
-      ['captations']
-    );
-    res.status(200).json(result.rows); // Return the most recent post
-  } catch (error) {
-    console.error("Error fetching the most recent post:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
-
-
-
-
-
-export const getLastEmissions = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const result = await pool.query(
-      'SELECT * FROM post WHERE categories = $1 ORDER BY date_de_publication DESC LIMIT 1',
-      ['emissions']
-    );
-    res.status(200).json(result.rows); // Return the most recent post
-  } catch (error) {
-    console.error("Error fetching the most recent post:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-};
 
 
 
