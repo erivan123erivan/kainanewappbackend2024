@@ -6,6 +6,7 @@ router.get('/all', postController.getPosts);  /* all reportages  */
 router.get('/longsformats', postController.getPostsLeLongsFormats);  /* all longs formats  */
 router.get('/captations' , postController.getPostsCaptations) /* all captations  */
 router.get('/emissions' , postController.getPostsEmissions)  /* all emissions */
+router.get('/post', postController.getAllPosts);  /* all reportages  */
 router.get('/lepailladin' , postController.getPostsLePailladin) /* all le pailladin  */
 router.get('/:id', postController.getPostByID); // Note: Use :id for dynamic ID
 router.post('/:id/like', postController.incrementLike); // Added parameter for post ID
