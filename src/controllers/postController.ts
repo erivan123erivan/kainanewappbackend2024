@@ -296,9 +296,6 @@ export const getPostByID = async (req: Request, res: Response): Promise<void> =>
 
 
 
-
-
-
 export const incrementLike = async (req: Request, res: Response): Promise<void> => {
   const postID = req.params.id;
   const { userId } = req.body;
@@ -338,5 +335,4 @@ export const incrementLike = async (req: Request, res: Response): Promise<void> 
     res.status(500).json({ message: "An internal server error occurred while updating the like count." });
   }
 };
-
 
