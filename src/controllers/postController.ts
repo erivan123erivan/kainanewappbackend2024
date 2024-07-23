@@ -299,12 +299,25 @@ export const getPostByID = async (req: Request, res: Response): Promise<void> =>
 
 
 
-
-
 export const incrementLike = async (req: Request, res: Response): Promise<void> => {
-  const postID = req.params.id; // Get the post ID from the request parameters
+  const postID = req.params.id;
+  const { userId } = req.body;
   try {
-    // Update the like count in the database
+    // Check if the user has already liked the post
+    const checkLike = await pool.query(
+      'SELECT * FROM postslikes WHERE post_id = $1 AND user_id = $2',
+      [postID, userId]
+    );
+    if (checkLike.rows.length > 0) {
+      res.status(400).json({ message: "User has already liked this post" });
+      return;
+    }
+    // Add a like to the postslikes table
+    await pool.query(
+      'INSERT INTO postslikes (post_id, user_id) VALUES ($1, $2)',
+      [postID, userId]
+    );
+    // Update the like count in the posts table
     const result = await pool.query(
       'UPDATE post SET likes = likes + 1 WHERE id = $1 RETURNING likes',
       [postID]
@@ -314,13 +327,14 @@ export const incrementLike = async (req: Request, res: Response): Promise<void> 
       res.status(404).json({ message: "Post not found" });
     } else {
       const updatedLikes = result.rows[0].likes;
-      res.status(200).json({ likes: updatedLikes }); // Return the updated like count
+      res.status(200).json({ likes: updatedLikes });
     }
   } catch (error) {
     console.error("Error updating like count:", error);
     res.status(500).json({ message: "An internal server error occurred while updating the like count." });
   }
 };
+
 
 
 
