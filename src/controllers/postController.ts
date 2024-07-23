@@ -116,58 +116,124 @@ export const getAllPosts = async (req: Request, res: Response): Promise<void> =>
    get posts emissions 
 */
 
+
+
 export const getPostsEmissions = async (req: Request, res: Response): Promise<void> => {
   try {
-    const result = await pool.query(
+    // First, get the most recent post
+    const lastPostResult = await pool.query(
       'SELECT * FROM post WHERE categories = $1 ORDER BY date_de_publication DESC LIMIT 1',
       ['emissions']
     );
-    res.status(200).json(result.rows); // Return the most recent post
+
+    if (lastPostResult.rows.length > 0) {
+      const lastPostId = lastPostResult.rows[0].id; // Assuming there's an 'id' column in the 'post' table
+
+      // Get all posts excluding the most recent post
+      const result = await pool.query(
+        'SELECT * FROM post WHERE categories = $1 AND id != $2',
+        ['emissions', lastPostId]
+      );
+
+      res.status(200).json(result.rows); // Return the filtered posts
+    } else {
+      // If there are no posts in the category, return an empty array
+      res.status(200).json([]);
+    }
   } catch (error) {
-    console.error("Error fetching the most recent post:", error);
+    console.error("Error fetching posts:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
 
 export const getPostsCaptations = async (req: Request, res: Response): Promise<void> => {
   try {
-    const result = await pool.query(
+    // First, get the most recent post
+    const lastPostResult = await pool.query(
       'SELECT * FROM post WHERE categories = $1 ORDER BY date_de_publication DESC LIMIT 1',
       ['captations']
     );
-    res.status(200).json(result.rows); // Return the most recent post
+
+    if (lastPostResult.rows.length > 0) {
+      const lastPostId = lastPostResult.rows[0].id; // Assuming there's an 'id' column in the 'post' table
+
+      // Get all posts excluding the most recent post
+      const result = await pool.query(
+        'SELECT * FROM post WHERE categories = $1 AND id != $2',
+        ['captations', lastPostId]
+      );
+
+      res.status(200).json(result.rows); // Return the filtered posts
+    } else {
+      // If there are no posts in the category, return an empty array
+      res.status(200).json([]);
+    }
   } catch (error) {
-    console.error("Error fetching the most recent post:", error);
+    console.error("Error fetching posts:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
 
 export const getPostsLePailladin = async (req: Request, res: Response): Promise<void> => {
   try {
-    const result = await pool.query(
+    // First, get the most recent post
+    const lastPostResult = await pool.query(
       'SELECT * FROM post WHERE categories = $1 ORDER BY date_de_publication DESC LIMIT 1',
       ['lepailladin']
     );
-    res.status(200).json(result.rows); // Return the most recent post
+
+    if (lastPostResult.rows.length > 0) {
+      const lastPostId = lastPostResult.rows[0].id; // Assuming there's an 'id' column in the 'post' table
+
+      // Get all posts excluding the most recent post
+      const result = await pool.query(
+        'SELECT * FROM post WHERE categories = $1 AND id != $2',
+        ['lepailladin', lastPostId]
+      );
+
+      res.status(200).json(result.rows); // Return the filtered posts
+    } else {
+      // If there are no posts in the category, return an empty array
+      res.status(200).json([]);
+    }
   } catch (error) {
-    console.error("Error fetching the most recent post:", error);
+    console.error("Error fetching posts:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
+
 
 export const getPostsLeLongsFormats = async (req: Request, res: Response): Promise<void> => {
   try {
-    const result = await pool.query(
+    // First, get the most recent post
+    const lastPostResult = await pool.query(
       'SELECT * FROM post WHERE categories = $1 ORDER BY date_de_publication DESC LIMIT 1',
       ['longsformats']
     );
-    res.status(200).json(result.rows); // Return the most recent post
+
+    if (lastPostResult.rows.length > 0) {
+      const lastPostId = lastPostResult.rows[0].id; // Assuming there's an 'id' column in the 'post' table
+
+      // Get all posts excluding the most recent post
+      const result = await pool.query(
+        'SELECT * FROM post WHERE categories = $1 AND id != $2',
+        ['longsformats', lastPostId]
+      );
+
+      res.status(200).json(result.rows); // Return the filtered posts
+    } else {
+      // If there are no posts in the category, return an empty array
+      res.status(200).json([]);
+    }
   } catch (error) {
-    console.error("Error fetching the most recent post:", error);
+    console.error("Error fetching posts:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
-
 
 
 
