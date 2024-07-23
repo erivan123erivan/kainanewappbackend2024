@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const usersRouter = require("./routes/users");
 const signupRouter = require("./routes/signup");
+const liveRouter = require("./routes/live");
 const postRouter = require("./routes/post");
 const libraryRouter = require("./routes/library");
 require("dotenv").config();
@@ -18,6 +19,7 @@ app.use("/users", usersRouter);
 app.use("/signup", signupRouter);
 app.use("/post", postRouter);
 app.get("/post/:id", getPostByID);
+app.get("/live", liveRouter);
 app.use("/library", libraryRouter); // Ensure the prefix is '/library'
 // Start the server
 app.listen(port, () => {
