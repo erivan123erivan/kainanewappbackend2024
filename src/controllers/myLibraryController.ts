@@ -29,19 +29,37 @@ export const fetchPostbyUserId = async (req: Request, res: Response): Promise<vo
       'SELECT post_id FROM mylibrary WHERE user_id = $1',
       [userId]
     );
+
     // Extract post IDs from the result
     const postIds: number[] = libraryResult.rows.map((row: { post_id: number }) => row.post_id);
+
     // If no post IDs are found, return an empty array and exit
     if (postIds.length === 0) {
       res.status(200).json([]);
       return; // Ensure no further code is executed
     }
+
     // Query to get posts based on the post IDs
     const postResult = await pool.query(
       'SELECT * FROM post WHERE id = ANY($1::int[])',
       [postIds]
     );
-    // Return the posts
+
+    // Extract the IDs of the posts that exist
+    const validPostIds = postResult.rows.map((post: { id: number }) => post.id);
+
+    // Find the IDs that are in the user's library but do not exist in the posts table
+    const invalidPostIds = postIds.filter(id => !validPostIds.includes(id));
+
+    // Remove invalid post IDs from the user's library
+    if (invalidPostIds.length > 0) {
+      await pool.query(
+        'DELETE FROM mylibrary WHERE user_id = $1 AND post_id = ANY($2::int[])',
+        [userId, invalidPostIds]
+      );
+    }
+
+    // Return the posts that still exist
     res.status(200).json(postResult.rows);
   } catch (error) {
     // Log the error and return a 500 status code
@@ -49,6 +67,9 @@ export const fetchPostbyUserId = async (req: Request, res: Response): Promise<vo
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
+
 
 
 export const deleteFromLibrary = async (req: Request, res: Response): Promise<void> => {
