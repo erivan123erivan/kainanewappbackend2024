@@ -1,6 +1,16 @@
 import { Request, Response } from "express"; // Importing types for Request and Response from Express
 const pool = require("../db"); // Importing the database connection pool
 
+
+
+
+
+
+
+
+
+
+
 export const addToLibrary = async (req: Request, res: Response): Promise<void> => {
   const { postId, userId } = req.body; // Extracting postId and userId from the request body
   try {
@@ -21,6 +31,28 @@ export const addToLibrary = async (req: Request, res: Response): Promise<void> =
   }
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export const fetchPostbyUserId = async (req: Request, res: Response): Promise<void> => {
   const { userId } = req.params;
   try {
@@ -29,37 +61,19 @@ export const fetchPostbyUserId = async (req: Request, res: Response): Promise<vo
       'SELECT post_id FROM mylibrary WHERE user_id = $1',
       [userId]
     );
-
     // Extract post IDs from the result
     const postIds: number[] = libraryResult.rows.map((row: { post_id: number }) => row.post_id);
-
     // If no post IDs are found, return an empty array and exit
     if (postIds.length === 0) {
       res.status(200).json([]);
       return; // Ensure no further code is executed
     }
-
     // Query to get posts based on the post IDs
     const postResult = await pool.query(
       'SELECT * FROM post WHERE id = ANY($1::int[])',
       [postIds]
     );
-
-    // Extract the IDs of the posts that exist
-    const validPostIds = postResult.rows.map((post: { id: number }) => post.id);
-
-    // Find the IDs that are in the user's library but do not exist in the posts table
-    const invalidPostIds = postIds.filter(id => !validPostIds.includes(id));
-
-    // Remove invalid post IDs from the user's library
-    if (invalidPostIds.length > 0) {
-      await pool.query(
-        'DELETE FROM mylibrary WHERE user_id = $1 AND post_id = ANY($2::int[])',
-        [userId, invalidPostIds]
-      );
-    }
-
-    // Return the posts that still exist
+    // Return the posts
     res.status(200).json(postResult.rows);
   } catch (error) {
     // Log the error and return a 500 status code
@@ -67,6 +81,19 @@ export const fetchPostbyUserId = async (req: Request, res: Response): Promise<vo
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
