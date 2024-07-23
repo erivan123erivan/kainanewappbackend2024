@@ -2,6 +2,16 @@ import { Request, Response } from "express";
 const pool = require("../db");
 
 
+export const getAllPosts = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const result = await pool.query('SELECT * FROM post ORDER BY date_de_publication DESC');
+    res.status(200).json(result.rows); // Return all posts ordered by publication date
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 
 
 export const getPosts = async (req: Request, res: Response): Promise<void> => {
