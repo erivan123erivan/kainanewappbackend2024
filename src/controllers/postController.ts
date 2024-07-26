@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 const pool = require("../db");
-
 // Define an asynchronous function to get the most recent post in the "reportages" category
 export const getPostsLast = async (
   req: Request, // Type for the request object
@@ -23,7 +22,6 @@ export const getPostsLast = async (
     res.status(500).json({ message: "Server error" });
   }
 };
-
 // Define an asynchronous function to get the most recent post in the "longsformats" category
 export const getLastLongsFormats = async (
   req: Request, // Type for the request object
@@ -45,7 +43,6 @@ export const getLastLongsFormats = async (
     res.status(500).json({ message: "Server error" });
   }
 };
-
 // Define an asynchronous function to get the most recent post in the "lepailladin" category
 export const getLastLePailladin = async (
   req: Request, // Type for the request object
@@ -392,19 +389,16 @@ export const incrementLike = async (
       res.status(400).json({ message: "User has already liked this post" });
       return; // Exit the function to prevent further execution
     }
-
     // Query to add a like to the postslikes table
     await pool.query(
       "INSERT INTO postslikes (post_id, user_id) VALUES ($1, $2)", // SQL query to insert a new like
       [postID, userId] // Parameters for the query
     );
-
     // Query to update the like count in the posts table
     const result = await pool.query(
       "UPDATE post SET likes = likes + 1 WHERE id = $1 RETURNING likes", // SQL query to increment the like count
       [postID] // Parameter for the query
     );
-
     // Check if the post was found and updated
     if (result.rows.length === 0) {
       // Respond with a 404 (Not Found) status if the post is not found
@@ -417,7 +411,6 @@ export const incrementLike = async (
   } catch (error) {
     // Log any errors that occur during query execution or response handling
     console.error("Error updating like count:", error);
-
     // Respond with a server error status and message
     res.status(500).json({
       message:
